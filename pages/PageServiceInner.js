@@ -1,16 +1,37 @@
+import { servicesData } from "../data/servicesData.js";
 import { PageTemplate } from "../lib/PageTemplate.js";
 
-class PageAbout extends PageTemplate {
-    constructor() {
+class PageServiceInner extends PageTemplate {
+    constructor(params) {
         super();
-        this.pageTitle = 'About';
-        this.page = 'about';
+        this.pageTitle = 'Service';
+        this.page = 'services';
+        this.params = params;
     }
 
     main() {
+        let serviceObj = null;
+
+        for (const service of servicesData) {
+            if (service.id === this.params.serviceId) {
+                serviceObj = service;
+                break;
+            }
+        }
+
+        if (serviceObj === null) {
+            return `
+                    <main>
+                        <section class="container-fluid py-5">
+                            <h1 class="display-5 fw-bold">Service not found</h1>
+                            <a href="/services" class="btn btn-primary btn-lg">Go to services list</a>
+                        </section>
+                    </main>`
+        }
+
         return `<main>
                         <section class="container-fluid py-5">
-                            <h1 class="display-5 fw-bold">About page</h1>
+                            <h1 class="display-5 fw-bold">${serviceObj.title}</h1>
                             <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it to your liking.</p>
                             <button class="btn btn-primary btn-lg" type="button">Example button</button>
                         </section>
@@ -36,4 +57,4 @@ class PageAbout extends PageTemplate {
     }
 }
 
-export { PageAbout };
+export { PageServiceInner };
