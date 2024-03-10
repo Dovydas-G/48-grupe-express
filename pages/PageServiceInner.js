@@ -1,4 +1,5 @@
 import { servicesData } from "../data/servicesData.js";
+import { serviceInnerData } from "../data/servicesData.js";
 import { PageTemplate } from "../lib/PageTemplate.js";
 
 class PageServiceInner extends PageTemplate {
@@ -29,32 +30,39 @@ class PageServiceInner extends PageTemplate {
                     </main>`
         }
 
-        return `<main>
-                        <section class="container-fluid py-5">
-                            <h1 class="display-5 fw-bold">${serviceObj.title}</h1>
-                            <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it to your liking.</p>
-                            <button class="btn btn-primary btn-lg" type="button">Example button</button>
-                        </section>
-                        <section class="container">
-                            <div class="row align-items-md-stretch">
-                                    <div class="col-md-6">
-                                        <div class="h-100 p-5 text-bg-dark rounded-3">
-                                            <h2>Change the background</h2>
-                                            <p>Swap the background-color utility and add a \`.text-*\` color utility to mix up the jumbotron look. Then, mix and match with additional component themes and more.</p>
-                                            <button class="btn btn-outline-light" type="button">Example button</button>
-                                         </div>
-                                    </div>
-                                <div class="col-md-6">
-                                    <div class="h-100 p-5 bg-body-tertiary border rounded-3">
-                                        <h2>Add borders</h2>
-                                        <p>Or, keep it light and add a border for some added definition to the boundaries of your content. Be sure to look under the hood at the source HTML here as we've adjusted the alignment and sizing of both column's content for equal-height.</p>
-                                        <button class="btn btn-outline-secondary" type="button">Example button</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                </main>`;
+        let listHTML = '';
+
+        for (const service of serviceInnerData) {
+            listHTML += `
+                 <div class="col">
+                     <div class="card shadow-sm">
+                         <img class="card-img-top" style="height: 150px; object-fit: cover;"  src="/img/bootstrap-themes.png" alt="Service image">
+                         <div class="card-body">
+                            <h3>${service.title}</h3>
+                             <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                             <div class="d-flex justify-content-between align-items-center">
+                                 <div class="btn-group">
+                                    <a href="${service.href}" class="btn  btn-primary my-2">Read more</a>
+                                 </div>
+                                 <small class="text-body-secondary">9 mins</small>
+                             </div>
+                         </div>
+                     </div>
+                 </div>`
+        }
+
+        return `
+        <main>
+            <div class="album py-5 bg-body-tertiary">
+                <div class="container">
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                        ${listHTML}
+                    </div>
+                </div>
+            </div>
+        </main>`;
     }
+    
 }
 
 export { PageServiceInner };
