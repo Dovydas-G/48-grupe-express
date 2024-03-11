@@ -11,6 +11,8 @@ import { PageTestimonials } from './pages/PageTestimonials.js';
 import { PageLocations } from './pages/PageLocations.js';
 import { PageTeam } from './pages/PageTeam.js'; 
 import { PageTeamInner } from './pages/PageTeamInner.js';  
+import { PageProjects } from './pages/PageProjects.js';
+import { PageProjectsInner } from './pages/PageProjectsInner.js';
 
 const app = express();
 const port = 4811;
@@ -63,6 +65,16 @@ app.get('/services/:serviceId/team', (req, res) => {
 
 app.get('/services/:serviceId/team/:teamId', (req, res) => {
     const page = new PageTeamInner(req.params);
+    res.send(page.render());  
+});
+
+app.get('/services/:serviceId/team/:teamId/projects', (req, res) => {
+    const page = new PageProjects(req.params);
+    res.send(page.render());  
+});
+
+app.get('/services/:serviceId/team/:teamId/projects/:projectId', (req, res) => {
+    const page = new PageProjectsInner(req.params);
     res.send(page.render());  
 });
 
