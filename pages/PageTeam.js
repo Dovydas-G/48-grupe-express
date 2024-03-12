@@ -2,8 +2,8 @@ import { teamData } from "../data/servicesData.js";
 import { PageTemplate } from "../lib/PageTemplate.js";
 
 class PageTeam extends PageTemplate {
-    constructor(params) {
-        super();
+    constructor(params, time) {
+        super(time);
         this.pageTitle = 'Service';
         this.page = 'services';
         this.params = params;

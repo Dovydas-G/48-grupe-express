@@ -2,8 +2,8 @@
 import { PageTemplate } from "../lib/PageTemplate.js";
 
 class PagePricing extends PageTemplate {
-    constructor(params) {
-        super();
+    constructor(params, time) {
+        super(time);
         this.pageTitle = 'Service';
         this.page = 'services';
         this.params = params;
