@@ -1,7 +1,7 @@
 
 function plusZero (digits) {
     if (digits < 10) {
-        digits = "0" + digits;
+        digits = '0' + digits;
     }
     return digits;
   }
