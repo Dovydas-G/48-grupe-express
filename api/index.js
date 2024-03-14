@@ -1,4 +1,6 @@
 import { Router } from "express";
+import { formatTimeAsText } from "../lib/formatTimeAsText.js";
+import { timeValueTitle } from "../lib/formatTimeAsText.js";
 
 const apiRouter = Router();
 
@@ -7,7 +9,7 @@ apiRouter.get('/api', (req, res) => {
    return res.send(`Sveiki atvyke i API puslapi. Pasirinkite viena is veiksmu: suma, atimtis, daugyba, dalyba`);
 });
 
-apiRouter.get('/api/:veiksmas', (req, res) => {
+apiRouter.get('/api/math/:veiksmas', (req, res) => {
     const mathFunc = req.params.veiksmas;
 
     if (mathFunc !== 'veiksmas' && mathFunc !== 'atimtis' && mathFunc !== 'daugyba' && mathFunc !== 'dalyba') {
@@ -17,11 +19,11 @@ apiRouter.get('/api/:veiksmas', (req, res) => {
    return res.send(`Norint susumuoti, reikia nurodyti 2 skaicius`);
 });
 
-apiRouter.get('/api/:veiksmas/:pirmas', (req, res) => {
+apiRouter.get('/api/math/:veiksmas/:pirmas', (req, res) => {
    return res.send(`Norint susumuoti, dar truksta vieno skaiciaus`);
 });
 
-apiRouter.get('/api/:veiksmas/:pirmas/:antras', (req, res) => {
+apiRouter.get('/api/math/:veiksmas/:pirmas/:antras', (req, res) => {
     const a = (+ req.params.pirmas);
     const b = (+ req.params.antras);
 
@@ -43,24 +45,36 @@ apiRouter.get('/api/:veiksmas/:pirmas/:antras', (req, res) => {
 
 //Reikia priimti varda ir pavarde ir grazinti inicialus.
 
-apiRouter.get('/apiname', (req, res) => {
+apiRouter.get('/api/initials', (req, res) => {
 
-    return res.send('Iveskite: varda ir pavarde');
+    return res.status(400).send('Norint pagaminti inicialus reikia nurodyti varda ir pavarde');
  });
 
+apiRouter.get('/api/initials/:firstname', (req, res) => {
 
-apiRouter.get('/apiname/:vardas/:pavarde', (req, res) => {
-    const name = req.params.vardas;
-    const lastName = req.params.pavarde;
+    return res.status(501).send('Norint pagaminti inicialus reikia nurodyti ne tik varda bet ir pavarde');
+ });
 
-    const result = `${name[0]}. ${lastName[0]}.`
-    return res.send(result);
+apiRouter.get('/api/initials/:firstname/:lastname', (req, res) => {
+    const firstname = req.params.firstname.trim();
+    const lastName = req.params.lastname.trim();
+
+    if (firstname.length === 0) {
+        return res.status(400).send('Vardas negali buti tuscias');
+    }
+    if (lastName.length === 0) {
+        return res.status(400).send('Pavarde negali buti tuscia');
+    }
+
+    const initials = (firstname[0] + '.' + lastName[0] + '.').toUpperCase();
+
+    return res.status(200).send(initials);
  });
 
 
  //Kreipiantis konkreciai i toki URL yra grazinamas laikas: hh:mm:ss
 
-apiRouter.get('/apitime/time', (req, res) => {
+apiRouter.get('/api/time', (req, res) => {
     function plusZero (digits) {
         if (digits < 10) {
             digits = '0' + digits;
@@ -78,7 +92,7 @@ apiRouter.get('/apitime/time', (req, res) => {
  });
 
 
- apiRouter.get('/apitimewords/time', (req, res) => {
+ apiRouter.get('/api/time-in-words', (req, res) => {
     
     const firstNumObj = {
         '1': 'pirma',
@@ -90,7 +104,7 @@ apiRouter.get('/apitime/time', (req, res) => {
         '7': 'septinta',
         '8': 'astunta',
         '9': 'devinta',
-        '10': 'desimt',
+        '10': 'desimta',
         '11': 'venuolika',
         '12': 'dvylika',
         '13': 'trylika',
@@ -165,10 +179,30 @@ apiRouter.get('/apitime/time', (req, res) => {
     
     const time = `${h} val : ${m} min : ${s} sec`;
     
+    
 
     return res.send(time);
  });
 
+
+
+ // Kreipiantis konkreciai i toli URL yra grazinamas laikas tokiu formatu hh:mm:ss, bet visi skaiciai yra zodziai
+// pvz.: 10:57:14 => desimt valandu, penkiasdesimt septynios minutes, keturiolika sekundziu
+// pasistenkti apgalvoti visas galimas gramatikos situacijas
+apiRouter.get('/api/time-as-text', (req, res) => {
+    const d = new Date();
+
+    const h = formatTimeAsText(d.getHours());
+    const m = formatTimeAsText(d.getMinutes());
+    const s = formatTimeAsText(d.getSeconds());
+
+    const ht = timeValueTitle(d.getHours(), 'h');
+    const mt = timeValueTitle(d.getMinutes(), 'm');
+    const st = timeValueTitle(d.getSeconds(), 's');
+
+    const time1 = `${h} ${ht}, ${m} ${mt}, ${s} ${st}`;
+    return res.status(200).send(time1);
+});
 
 
  export { apiRouter };
