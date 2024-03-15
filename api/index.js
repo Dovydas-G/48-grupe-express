@@ -205,6 +205,49 @@ apiRouter.get('/api/time-as-text', (req, res) => {
 });
 
 
+apiRouter.get('/api/greeting', (req, res) => {
+
+    return res.status(400).send('Norint gaudi pasisveikinimo zinute reikia nurodyti varda');
+ });
+
+
+ apiRouter.get('/api/greeting/:firstname', (req, res) => {
+    const firstName = req.params.firstname.trim();
+
+    if (firstName.length === 0) {
+        return res.status(400).send('Vardas negali buti tuscias');
+    }
+
+    const lastLetter = firstName[firstName.length - 1].toLowerCase();
+    const penultimateLetter = firstName[firstName.length - 2].toLowerCase();
+
+    let greetingName = '';
+
+    if (lastLetter === 'ė' && penultimateLetter !== 'i' && penultimateLetter !== 'u' && penultimateLetter !== 'y') {
+        greetingName = (firstName.slice(0, -1) + 'e');
+    }
+    else if (lastLetter === 's' && penultimateLetter !== 'i' && penultimateLetter !== 'u' && penultimateLetter !== 'y') {
+        greetingName = (firstName.slice(0, -1) + 'i');
+    }
+    else if (penultimateLetter === 'u') {
+        greetingName = (firstName.slice(0, -2) + 'au');
+    }
+    else if (penultimateLetter === 'i' || penultimateLetter === 'y') {
+        greetingName = (firstName.slice(0, -1));
+    }
+    else {
+        greetingName = (firstName);
+    }
+
+    const result = greetingName.slice(0, 1).toUpperCase() + greetingName.slice(1).toLowerCase();
+
+
+    return res.status(200).send(`Labas, ${result}!`);
+
+
+ });
+
+
  export { apiRouter };
 
 
