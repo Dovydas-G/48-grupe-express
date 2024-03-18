@@ -2,6 +2,7 @@ import { Router } from "express";
 import { PageHome } from "../pages/PageHome.js";
 import { PageAbout } from "../pages/PageAbout.js";
 import { PageServicesList } from "../pages/PageServicesList.js";
+import { PageCalc } from "../pages/PageCalc.js";
 import { Page404 } from '../pages/Page404.js';
 import { PageServiceInner } from '../pages/PageServiceInner.js';
 import { PagePricing } from '../pages/PagePricing.js';
@@ -28,6 +29,11 @@ router.get('/about', (req, res) => {
 
 router.get('/services', (req, res) => {
     const page = new PageServicesList(req.time);
+    res.send(page.render());
+});
+
+router.get('/calc', (req, res) => {
+    const page = new PageCalc(req.time);
     res.send(page.render());
 });
 

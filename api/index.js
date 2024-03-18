@@ -239,10 +239,10 @@ apiRouter.get('/api/greeting', (req, res) => {
         greetingName = (firstName);
     }
 
-    const result = greetingName.slice(0, 1).toUpperCase() + greetingName.slice(1).toLowerCase();
+    const greetingMessage = greetingName.slice(0, 1).toUpperCase() + greetingName.slice(1).toLowerCase();
 
 
-    return res.status(200).send(`Labas, ${result}!`);
+    return res.status(200).send(`Labas, ${greetingMessage}!`);
 
 
  });
